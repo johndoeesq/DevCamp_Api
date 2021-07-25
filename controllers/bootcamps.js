@@ -128,13 +128,14 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
     }
 
     //Checking if the file exists or not
-    if (!req.file) {
+    if (!req.files) {
         return next(
             new ErrorResponse(`Please select the file`), 400
         )
     }
+    console.log(req.files);
 
-    const file = rew.files.file;
+    const file = req.files.file;
 
     //Checking if the file is the photo
     if (!file.mimetype.startsWith('image')) {
@@ -144,16 +145,16 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
     }
 
     //Checking for the maximum file sizw
-    if (file.size > preocess.env.MAX_FILE_UPLOAD) {
+    if (file.size > process.env.MAX_FILE_UPLOAD) {
         return next(
             new ErrorResponse(`Please upload the image less than${preocess.env.MAX_FILE_UPLOAD}`)
             , 400
         )
     }
 
-    //Create custom filename
+    // //Create custom filename
     file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`;
-
+     
     //Upload the file
     file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
         if (err) {
@@ -165,10 +166,10 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
 
     //Updating the database
 
-    await Bootcamp.findByIdAndUpdate(req.params.id,{photo:filename});
-    res.status(200).josn({
+    await Bootcamp.findByIdAndUpdate(req.params.id,{photo:file.name});
+    res.status(200).json({
         status:true,
         message:"Succesfully updated the file",
-        data:filename
+        data:file.name
     })
 });
