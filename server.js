@@ -13,6 +13,7 @@ dotenv.config({path:'./config/config.env'});
 //Route files
 const bootcamps= require('./routes/bootcamps');
 const courses=require('./routes/courses');
+const auth=require('./routes/auth');
 
 
 //Connecting to the database
@@ -39,6 +40,9 @@ app.use('/api/v1/bootcamps',bootcamps);
 
 //Mounting the courses routers
 app.use('/api/v1/courses',courses);
+
+//Mounting the auth routers
+app.use('/api/v1/auth',auth);
 
 
 //Using the errorHandler middleware
