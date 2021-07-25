@@ -16,18 +16,18 @@ const ErrorResponse = require('../utils/errorResponse');
 
 //@desc     Get all the courses along with the bootcamp_id
 exports.getCourses = asyncHandler(async (req, res, next) => {
-   
+
     if (req.params.bootcampId) {
-      const courses = await Course.find({ bootcamp: req.params.bootcampId })
-      res.status(200).json({
-          status:true,
-          count:courses.length,
-          data:courses
-      })
+        const courses = await Course.find({ bootcamp: req.params.bootcampId })
+        res.status(200).json({
+            status: true,
+            count: courses.length,
+            data: courses
+        })
     } else {
         res.status(200).json(res.advanceResults);
     }
-        
+
 });
 
 
@@ -39,7 +39,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
         path: 'bootcamp',
         select: 'name description'
     })
- 
+
     //Checking if the course exists or not
     if (!course) {
         return next(

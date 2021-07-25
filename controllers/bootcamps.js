@@ -17,12 +17,12 @@ const path = require('path');
 //@access   public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
 
-   
+
 
     //Setting the response
-    res.status(200).json( res.advanceResults
+    res.status(200).json(res.advanceResults
         //hello:req.hello
-        )
+    )
 
 });
 
@@ -154,7 +154,7 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
 
     // //Create custom filename
     file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`;
-     
+
     //Upload the file
     file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
         if (err) {
@@ -166,10 +166,10 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
 
     //Updating the database
 
-    await Bootcamp.findByIdAndUpdate(req.params.id,{photo:file.name});
+    await Bootcamp.findByIdAndUpdate(req.params.id, { photo: file.name });
     res.status(200).json({
-        status:true,
-        message:"Succesfully updated the file",
-        data:file.name
+        status: true,
+        message: "Succesfully updated the file",
+        data: file.name
     })
 });

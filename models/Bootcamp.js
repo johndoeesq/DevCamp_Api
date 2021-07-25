@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
-const slugify=require('slugify');
+const slugify = require('slugify');
 
 const BootCampSchema = new mongoose.Schema({
     name: {
         type: String,
-       // required: [true,'Please enter the name'],
+        // required: [true,'Please enter the name'],
         unique: true,
         trim: true,
         maxlength: [50, 'Name cannot be more than 50 characters']
     },
-   // slug: String,
+    // slug: String,
     description: {
         type: String,
-        required: [true,'Please add the description'],
+        required: [true, 'Please add the description'],
         maxlength: [500, 'Description  cannot be more than 500 characters']
     },
     website: {
@@ -31,12 +31,12 @@ const BootCampSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-       // required: [true, 'Please enter the address']
+        // required: [true, 'Please enter the address']
     },
-    careers:{
-        type:[String],
-        required:[true,'Please choose a careers'],
-        enum:[
+    careers: {
+        type: [String],
+        required: [true, 'Please choose a careers'],
+        enum: [
             'Web Development',
             'Mobile Development',
             'UI/UX',
@@ -46,40 +46,40 @@ const BootCampSchema = new mongoose.Schema({
         ]
 
     },
-    averageRating:{
-        type:Number,
-        min:[1,'Rating must be at least 1'],
-        max:[10,'Rating cannot be more than 10']
+    averageRating: {
+        type: Number,
+        min: [1, 'Rating must be at least 1'],
+        max: [10, 'Rating cannot be more than 10']
     },
-    averageCost:Number,
-    photo:{
-        type:String,
+    averageCost: Number,
+    photo: {
+        type: String,
         default: 'no-photo.jpg'
     },
-    housing:{
-        type:Boolean,
-        default:false
+    housing: {
+        type: Boolean,
+        default: false
     },
-    jobAssistance:{
-        type:Boolean,
-        default:false
+    jobAssistance: {
+        type: Boolean,
+        default: false
     },
-    jobGuarantee:{
-        type:Boolean,
-        dafault:false
+    jobGuarantee: {
+        type: Boolean,
+        dafault: false
     },
-    acceptGi1:{
-        type:Boolean,
-        default:false
+    acceptGi1: {
+        type: Boolean,
+        default: false
     },
-    createdAt:{
-        type:Date,
-        default:Date.now
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 
-},{
-    toJSON:{virtuals:true},
-    toObject:{virtuals:true}
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 
@@ -91,20 +91,20 @@ const BootCampSchema = new mongoose.Schema({
 // })
 
 //Cascade deleting courses when a bootcamp is deleted
-BootCampSchema.pre('remove',async function(next){
+BootCampSchema.pre('remove', async function (next) {
     console.log("The courses are being deleted")
-    await this.model('Course').deleteMany({bootcamp:this._id});
+    await this.model('Course').deleteMany({ bootcamp: this._id });
     next();
 })
 
 //Reverse populate with virtuals
-BootCampSchema.virtual('courses',{
-ref:'Course',
-localField:'_id',
-foreignField:'bootcamp',
-justOnce:false
+BootCampSchema.virtual('courses', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'bootcamp',
+    justOnce: false
 })
 
 
 //Exporting the bootcamp model
-module.exports=mongoose.model('Bootcamp',BootCampSchema);
+module.exports = mongoose.model('Bootcamp', BootCampSchema);
