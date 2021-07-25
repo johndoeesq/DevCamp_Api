@@ -36,3 +36,23 @@
     //     status:true,
     //     message:"Bootcamp successfully addded!"
     // })
+
+    //Courses getAllcourse in else
+    // query=Course.find().populate('bootcamp');
+        //If only selected field from the bootcamp is to be displayed then
+        // query = Course.find().populate({
+        //     path: 'bootcamp',
+        //     select: 'name description'
+        // })
+    // }
+
+    // const courses = await query;
+
+
+    // //Setting the response
+    // res.status(200).json({
+    //     status: true,
+    //     message: "All the courses fetched",
+    //     count: courses.length,
+    //     data: courses
+    // })

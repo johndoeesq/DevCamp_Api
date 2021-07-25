@@ -1,7 +1,9 @@
 const express= require('express');
 const dotenv= require('dotenv');
 const morgan= require('morgan');
-const errorHandler=require('./middleware/error')
+const path=require('path');
+const errorHandler=require('./middleware/error');
+const fileupload=require('express-fileupload');
 const connectDatabase= require('./config/db');
 
 
@@ -26,6 +28,11 @@ app.use(express.json());
 //using the logger middleware module
 app.use(morgan('tiny'));
 
+//Middleware for the fileupload
+app.use(fileupload());
+
+//Setting the public as a static folder
+app.use(express.static(path.join(__dirname,'public')));
 
 //Mounting the bootcamp routers
 app.use('/api/v1/bootcamps',bootcamps);

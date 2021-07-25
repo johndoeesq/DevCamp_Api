@@ -16,35 +16,19 @@ const ErrorResponse = require('../utils/errorResponse');
 
 //@desc     Get all the courses along with the bootcamp_id
 exports.getCourses = asyncHandler(async (req, res, next) => {
-    let query;
+   
     if (req.params.bootcampId) {
-        query = Course.find({ bootcamp: req.params.bootcampId })
+      const courses = await Course.find({ bootcamp: req.params.bootcampId })
+      res.status(200).json({
+          status:true,
+          count:courses.length,
+          data:courses
+      })
     } else {
-        // query=Course.find().populate('bootcamp');
-        //If only selected field from the bootcamp is to be displayed then
-        query = Course.find().populate({
-            path: 'bootcamp',
-            select: 'name description'
-        })
+        res.status(200).json(res.advanceResults);
     }
-
-    const courses = await query;
-
-    //Checking if there or not 
-    if (!courses) {
-        return next(
-            new ErrorResponse(`No Course found with the id: ${req.params.id}`),
-            404);
-    }
-
-    //Setting the response
-    res.status(200).json({
-        status: true,
-        message: "All the courses fetched",
-        count: courses.length,
-        data: courses
-    })
-})
+        
+});
 
 
 //Getting only a single course
