@@ -4,6 +4,7 @@ const morgan= require('morgan');
 const path=require('path');
 const errorHandler=require('./middleware/error');
 const fileupload=require('express-fileupload');
+const cookieParser=require('cookie-parser');
 const connectDatabase= require('./config/db');
 
 
@@ -25,6 +26,9 @@ const app= express();
 
 //Body Parser
 app.use(express.json());
+
+//Cookie Parser
+app.use(cookieParser());
 
 //using the logger middleware module
 app.use(morgan('tiny'));

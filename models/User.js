@@ -3,6 +3,9 @@ const mongoose= require('mongoose');
 //Including the bcrypt for encryption
 const bcrypt=require('bcryptjs');
 
+//Including the JsonWebToken
+const jwt=require('jsonwebtoken');
+
 const UserSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -37,9 +40,23 @@ const UserSchema=new mongoose.Schema({
     }
 })
 
+
 //Encrypting the password
 UserSchema.pre('save',async function(next){
     const salt= await bcrypt.genSalt(10);
     this.password=await bcrypt.hash(this.password,salt);
-})
+});
+
+//Sign JWT and return
+UserSchema.methods.getSignedJwtToken=function(){
+    return jwt.sign({id:this._id},process.env.JWT_SECRET,{
+        expiresIn:process.env.JWT_EXPIRE
+    });
+}
+
+//Method to match user entered method to match with the database
+UserSchema.methods.matchPassword=async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword,this.password)
+} 
+
 module.exports=mongoose.model('User',UserSchema);
