@@ -88,3 +88,15 @@ const sendTokenResponse = (user, statusCode, res) => {
             token
         })
 }
+
+//@desc     Getting the User
+//@router   GET api/v1/user/me
+//@access   private
+exports.getMe = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+        status: true,
+        data: user
+    })
+})

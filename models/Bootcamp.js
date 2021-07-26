@@ -4,12 +4,12 @@ const slugify = require('slugify');
 const BootCampSchema = new mongoose.Schema({
     name: {
         type: String,
-        // required: [true,'Please enter the name'],
+        required: [true,'Please enter the name'],
         unique: true,
         trim: true,
         maxlength: [50, 'Name cannot be more than 50 characters']
     },
-    // slug: String,
+   // slug: String,
     description: {
         type: String,
         required: [true, 'Please add the description'],
@@ -31,7 +31,7 @@ const BootCampSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        // required: [true, 'Please enter the address']
+        required: [true, 'Please enter the address']
     },
     careers: {
         type: [String],
@@ -83,7 +83,7 @@ const BootCampSchema = new mongoose.Schema({
 });
 
 
-//Creating Bootcamp Slug from the name
+// //Creating Bootcamp Slug from the name
 // BootCampSchema.pre('save',function(next){
 //     this.slug=slugify(this.name,{  
 //         lower:true

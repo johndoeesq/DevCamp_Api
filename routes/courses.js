@@ -9,6 +9,8 @@ const {
     deleteCourse
 } = require('../controllers/courses');
 
+//Bringing in the protect function from the auth middleware
+const{protect,authorize}=require('../middleware/auth');
 
 //Including the course model
 const Course = require('../models/Course');
@@ -26,13 +28,13 @@ router
         path: 'bootcamp',
         select: 'name description'
     }), getCourses)
-    .post(createCourse)
+    .post(protect,authorize('publisher','admin'),createCourse)
 
 //Creating the route with the id
 router
     .route('/:id')
     .get(getCourse)
-    .put(updateCourse)
-    .delete(deleteCourse)
+    .put(protect,authorize('publisher','admin'),updateCourse)
+    .delete(protect,authorize('publisher','admin'),deleteCourse)
 
 module.exports = router;
