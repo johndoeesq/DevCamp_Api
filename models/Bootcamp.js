@@ -9,7 +9,7 @@ const BootCampSchema = new mongoose.Schema({
         trim: true,
         maxlength: [50, 'Name cannot be more than 50 characters']
     },
-   // slug: String,
+   slug: String,
     description: {
         type: String,
         required: [true, 'Please add the description'],
@@ -72,6 +72,11 @@ const BootCampSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    user:{
+        type:mongoose.Schema.ObjectId,
+        ref:'User',
+        required:'true'
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -83,12 +88,13 @@ const BootCampSchema = new mongoose.Schema({
 });
 
 
-// //Creating Bootcamp Slug from the name
-// BootCampSchema.pre('save',function(next){
-//     this.slug=slugify(this.name,{  
-//         lower:true
-//     })
-// })
+//Creating Bootcamp Slug from the name
+BootCampSchema.pre('save',function(next){
+    this.slug=slugify(this.name,{  
+        lower:true
+    })
+    next();
+})
 
 //Cascade deleting courses when a bootcamp is deleted
 BootCampSchema.pre('remove', async function (next) {
