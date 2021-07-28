@@ -9,7 +9,7 @@ const User = require('../models/User');
 
 
 //@desc     Register User
-//@router   POST api/v1/user/register
+//@router   POST api/v1/auth/register
 //@access   public
 exports.register = asyncHandler(async (req, res, next) => {
     const { name, email, password, role } = req.body;
@@ -27,7 +27,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 })
 
 //@desc     Login User
-//@router   POST api/v1/user/register
+//@router   POST api/v1/auth/register
 //@access   public
 exports.login = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
@@ -35,8 +35,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     //Validating email and password
     if (!email || !password) {
         return next(
-            new ErrorResponse('Please provide the email and the password'), 400
-        )
+            new ErrorResponse('Please provide the email and the password',400))
     }
 
     //Check for the user
@@ -45,8 +44,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     //Validating for the user
     if (!user) {
         return next(
-            new ErrorResponse('Invalid Cerenditials'), 401
-        )
+            new ErrorResponse('Invalid Cerenditials', 401));
     }
 
     //Check if password matches
@@ -54,14 +52,45 @@ exports.login = asyncHandler(async (req, res, next) => {
 
     if (!isMatch) {
         return next(
-            new ErrorResponse('Invalid Cerenditials'), 401
-        )
+            new ErrorResponse('Invalid Cerenditials', 401));
     }
 
     //Create token,cookie and send response
     sendTokenResponse(user, 200, res);
 
 })
+
+
+//@desc     Getting the User
+//@router   GET api/v1/auth/getme
+//@access   private
+exports.getMe = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+        status: true,
+        data: user
+    })
+})
+
+
+//@desc     Forgot the password
+//@router   POST api/v1/user/forgotpassword
+//@access   Public
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+    const user = await User.findOne({email:req.body.email});
+
+    if(!user){
+        return next(
+        new ErrorResponse(`There is no user with that email`,404));
+    }
+
+    res.status(200).json({
+        status: true,
+        data: user
+    })
+})
+
 
 
 //Getting token from Model,Creating Cookie and sending response
@@ -88,15 +117,3 @@ const sendTokenResponse = (user, statusCode, res) => {
             token
         })
 }
-
-//@desc     Getting the User
-//@router   GET api/v1/user/me
-//@access   private
-exports.getMe = asyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.user.id);
-
-    res.status(200).json({
-        status: true,
-        data: user
-    })
-})

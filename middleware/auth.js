@@ -18,7 +18,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     //verifying the token
     if (!token) {
         return next(
-            new ErrorResponse('Not authorize to access this route'), 401);
+            new ErrorResponse('Not authorize to access this route', 401));
     }
 
     try {
@@ -31,7 +31,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
         next();
     } catch (err) {
         return next(
-            new ErrorResponse('Not authorize to access this route since the id was not found'), 401);
+            new ErrorResponse('Not authorize to access this route since the id was not found'
+            , 401));
 
     }
 });
@@ -41,8 +42,8 @@ exports.authorize = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
             return next(
-                new ErrorResponse(`Role: ${req.user.role} is not authorize to accessthis route`)
-                , 401);
+                new ErrorResponse(`Role: ${req.user.role} is not authorize to accessthis route`
+                , 401));
         }
         next();
     }

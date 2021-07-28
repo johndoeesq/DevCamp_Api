@@ -43,8 +43,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
     //Checking if the course exists or not
     if (!course) {
         return next(
-            new ErrorResponse(`No Course found with the id: ${req.params.id}`),
-            404);
+            new ErrorResponse(`No Course found with the id: ${req.params.id}`, 404));
     }
 
     //Setting the responses
@@ -62,7 +61,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 exports.createCourse = asyncHandler(async (req, res, next) => {
     //Passing the bootcamp Id to be on the request body
     req.body.bootcamp = req.params.bootcampId;
-    req.body.user=req.user.id;
+    req.body.user = req.user.id;
 
     //Now finding the specific Bootcamp
     const bootcamp = await Bootcamp.findById(req.params.bootcampId);
@@ -70,14 +69,14 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
     //Checking if the bootcamp exits or not
     if (!bootcamp) {
         return next(
-            new ErrorResponse(`No bootcamp is found with the ${req.params.bootcampId}`), 404);
+            new ErrorResponse(`No bootcamp is found with the ${req.params.bootcampId}`, 404));
     }
 
     //Making sure the user is the bootcamp owner
-    if(bootcamp.user.toString()!==req.user.id && req.user.role !=='admin'){
+    if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
         return next(
             new ErrorResponse(
-                `User with the ${req.user.id} cannot create a new course`), 404);
+                `User with the ${req.user.id} cannot create a new course`, 404));
     }
 
     //Creating the course
@@ -99,20 +98,19 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 
     //Finding the respective course
     let course = await Course.findById(req.params.id);
-    
+
 
     //Checking if the course exists or not
     if (!course) {
         return next(
-            new ErrorResponse(`No Course found with the id: ${req.params.id}`),
-            404);
+            new ErrorResponse(`No Course found with the id: ${req.params.id}`, 404));
     }
 
     //Making sure the user is the course owner
-    if(course.user.toString()!==req.user.id && req.user.role !=='admin'){
+    if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
         return next(
             new ErrorResponse(
-                `User with the ${req.user.id} cannot update the course with ${course._id}`), 400);
+                `User with the ${req.user.id} cannot update the course with ${course._id}`, 400));
     }
 
     //Updating the respective course
@@ -136,18 +134,18 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
 
     //Finding the specific course
     let course = await Course.findById(req.params.id);
-   
+
     //Checking if the course exists or not
     if (!course) {
         return next(
-            new ErrorResponse(`No Course with the id:${req.params.id} found`), 400);
+            new ErrorResponse(`No Course with the id:${req.params.id} found`, 400));
     }
- 
+
     //Making sure the user is the course owner
-    if(course.user.toString()!==req.user.id && req.user.role !=='admin'){
+    if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
         return next(
             new ErrorResponse(
-                `User with the ${req.user.id} cannot remove the course with ${course._id}`), 404);
+                `User with the ${req.user.id} cannot remove the course with ${course._id}`, 404));
     }
 
     //Removing the specific course

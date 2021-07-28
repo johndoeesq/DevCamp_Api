@@ -32,8 +32,8 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
     //Checking if the bootcamp exists or not
     if (!bootcamp) {
         return next(
-            new ErrorResponse(`No Course found with the id: ${req.params.id}`),
-            404);
+            new ErrorResponse(`No Course found with the id: ${req.params.id}`,
+            404));
     }
 
     //Setting up the response
@@ -59,9 +59,9 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
     if(publishedBootcamp && req.user.role!=='admin'){
         return next(
             new ErrorResponse(
-                `The user with ${req.user.id} has already added a bootcamp`),
+                `The user with ${req.user.id} has already added a bootcamp`,
                 400
-        )
+        ))
     }
     const bootcamp = await Bootcamp.create(req.body);
     res.status(201).json({
@@ -83,14 +83,14 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
     //Checking if the bootcamp exists or not
     if (!bootcamp) {
         return next(
-            new ErrorResponse(`No Bootcamp with id ${req.params.id}`), 404);
+            new ErrorResponse(`No Bootcamp with id ${req.params.id}`, 404));
     }
 
     //Making sure the user is the bootcamp owner
     if(bootcamp.user.toString()!==req.user.id && req.user.role !=='admin'){
         return next(
             new ErrorResponse(
-                `User with the ${req.user.id} cannot update the bootcamp`), 404);
+                `User with the ${req.user.id} cannot update the bootcamp`, 404));
     }
 
     //Updating the requested bootcamp
@@ -118,14 +118,14 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     //Checking if the bootcamp exists or not
     if (!bootcamp) {
         return next(
-            new ErrorResponse(`No Bootcamp with id:${req.params.id} found`), 404)
+            new ErrorResponse(`No Bootcamp with id:${req.params.id} found`, 404))
     }
 
     //Making sure the user is the bootcamp owner
     if(bootcamp.user.toString()!==req.user.id && req.user.role !=='admin'){
         return next(
             new ErrorResponse(
-                `User with the ${req.user.id} cannot delete the bootcamp`), 404);
+                `User with the ${req.user.id} cannot delete the bootcamp`, 404));
     }
 
     //Removing the bootcamp from the database
@@ -147,21 +147,20 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
     //Checking if the bootcamp exists or not
     if (!bootcamp) {
         return next(
-            new ErrorResponse(`No Bootcamp with id:${req.params.id} found`), 404)
+            new ErrorResponse(`No Bootcamp with id:${req.params.id} found`, 404))
     }
     
     //Making sure the user is the bootcamp owner
     if(bootcamp.user.toString()!==req.user.id && req.user.role !=='admin'){
         return next(
             new ErrorResponse(
-                `User with the ${req.user.id} cannot update the bootcamp`), 404);
+                `User with the ${req.user.id} cannot update the bootcamp`, 404));
     }
 
     //Checking if the file exists or not
     if (!req.files) {
         return next(
-            new ErrorResponse(`Please select the file`), 400
-        )
+            new ErrorResponse(`Please select the file`, 400));
     }
     
     const file = req.files.file;
@@ -169,8 +168,7 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
     //Checking if the file is the photo
     if (!file.mimetype.startsWith('image')) {
         return next(
-            new ErrorResponse(`Please select the image file`), 400
-        )
+            new ErrorResponse(`Please select the image file`, 400));
     }
 
     //Checking for the maximum file sizw
@@ -189,7 +187,7 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
         if (err) {
             console.error(err);
             return next(
-                new ErrorResponse(`Problem with file upload`), 500)
+                new ErrorResponse(`Problem with file upload`, 500));
         }
     });
 
