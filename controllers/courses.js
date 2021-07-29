@@ -114,7 +114,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
     }
 
     //Updating the respective course
-    course = await Course.findOneAndUpdate(req.params.id, req.body, {
+    course = await Course.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
     });

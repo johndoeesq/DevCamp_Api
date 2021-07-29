@@ -35,7 +35,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     //Validating email and password
     if (!email || !password) {
         return next(
-            new ErrorResponse('Please provide the email and the password',400))
+            new ErrorResponse('Please provide the email and the password', 400))
     }
 
     //Check for the user
@@ -65,7 +65,14 @@ exports.login = asyncHandler(async (req, res, next) => {
 //@router   GET api/v1/auth/getme
 //@access   private
 exports.getMe = asyncHandler(async (req, res, next) => {
+
     const user = await User.findById(req.user.id);
+
+    //Check for the user
+    if (!user) {
+        return next(
+            new ErrorResponse(`There is no user with that id`, 404));
+    }
 
     res.status(200).json({
         status: true,
@@ -78,12 +85,20 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 //@router   POST api/v1/user/forgotpassword
 //@access   Public
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
-    const user = await User.findOne({email:req.body.email});
+    const user = await User.findOne({ email: req.body.email });
 
-    if(!user){
+    if (!user) {
         return next(
-        new ErrorResponse(`There is no user with that email`,404));
+            new ErrorResponse(`There is no user with that email`, 404));
     }
+
+    //Get resetToken from the User model
+    const resetToken = user.getResetPasswordToken();
+
+    console.log(resetToken);
+
+    //Storing the token and expire date in the database
+    await user.save({validateBeforeSave:false})
 
     res.status(200).json({
         status: true,

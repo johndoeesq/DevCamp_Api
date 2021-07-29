@@ -38,7 +38,7 @@ app.use(fileupload());
 
 //Setting the public as a static folder
 app.use(express.static(path.join(__dirname, 'public')));
-
+  
 //Mounting the bootcamp routers
 app.use('/api/v1/bootcamps', bootcamps);
 

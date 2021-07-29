@@ -4,7 +4,8 @@ const express = require('express');
 const {
     register,
     login,
-getMe } = require('../controllers/auth');
+getMe,
+forgotPassword } = require('../controllers/auth');
 
 //Bringing in the protect method
 const {protect}=require('../middleware/auth');
@@ -16,6 +17,7 @@ const router = express.Router();
 router.post('/register', register)
 router.post('/login', login)
 router.get('/getme',protect,getMe)
+router.post('/forgotpassword',forgotPassword)
 
 
 module.exports = router;
